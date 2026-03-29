@@ -9,31 +9,39 @@ type ContaCorrente struct {
 	saldo         float64
 }
 
+func (c *ContaCorrente) Sacar(valorDoSaque float64) string {
+
+	podeSacar := valorDoSaque > 0 && valorDoSaque <= c.saldo
+
+	if podeSacar {
+		c.saldo -= valorDoSaque
+		return "Saque realizado com sucesso"
+	} else {
+		return "Saldo insuficiente para realizar o saque"
+	}
+}
+
+func (c ContaCorrente) Depositar(valorDoDeposito float64) (string, float64) {
+	if valorDoDeposito <= 0 {
+		return "Valor do depósito deve ser maior que zero", c.saldo
+	}
+	c.saldo += valorDoDeposito
+	return "Depósito realizado com sucesso", c.saldo
+}
+
 func main() {
 
-	contaDoMauro := ContaCorrente{
-		titular:       "Mauro Silva",
-		numeroAgencia: 4321,
-		numeroConta:   98765,
-		saldo:         2500.75,
-	}
+	contaDoSilvia := ContaCorrente{}
+	contaDoSilvia.titular = "Silvia"
+	contaDoSilvia.numeroAgencia = 863
+	contaDoSilvia.numeroConta = 863452
+	contaDoSilvia.saldo = 1000.00
 
-	var contaDoCristina *ContaCorrente
-	contaDoCristina = new(ContaCorrente)
-	contaDoCristina.titular = "Cristina Oliveira"
-	contaDoCristina.numeroAgencia = 4321
-	contaDoCristina.numeroConta = 98766
-	contaDoCristina.saldo = 3000.00
-	fmt.Println(contaDoMauro)
-	fmt.Println(*contaDoCristina)
+	fmt.Println(contaDoSilvia.Sacar(300))
+	status, saldo := contaDoSilvia.Depositar(500)
+	fmt.Println(status)
+	fmt.Printf("Saldo atual: R$ %.2f\n", saldo)
 
-	var titular string = "João da Silva"
-	var numeroAgencia int = 1234
-	var numeroConta int = 56789
-	var saldo float64 = 1000.50
+	fmt.Println("contado do Silvia tem saldo de R$", contaDoSilvia.saldo)
 
-	fmt.Printf("Titular: %s\n", titular)
-	fmt.Printf("Agência: %d\n", numeroAgencia)
-	fmt.Printf("Conta: %d\n", numeroConta)
-	fmt.Printf("Saldo: %.2f\n", saldo)
 }
